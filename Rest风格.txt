@@ -1,0 +1,79 @@
+5、REST风格
+REST即表述性状态传递（英文：Representational State Transfer，简称REST）
+
+约束：
+* 每个资源都有自己的标识 ( URL)
+* 每个请求都有明确的动词 ( GET, POST, PUT, DELETE )
+
+1）RestFull风格的Controller
+//REST风格，仅支持get请求，推荐使用，语义明确
+@RequestMapping(value = "toLogin",method = RequestMethod.GET)
+等价于：
+@GetMapping(value = "toLogin")
+
+RequestMethod.GET
+RequestMethod.PUT
+RequestMethod.DELETE
+RequestMethod.POST
+对应：
+@GetMapping
+@PostMapping
+@DeleteMapping
+@PutMapping
+
+前端页面对Rest的支持
+隐藏表单域，名称_method，
+<input type="hidden" name="_method" value="PUT">
+而且必须设置在POST请求中，需要配置POST请求转换的过滤器。
+<filter>
+    <filter-name>httpMethodFilter</filter-name>
+    <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
+</filter>
+<filter-mapping>
+    <filter-name>httpMethodFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+</filter-mapping>
+
+JSP页面仅仅支持三个动词 : get,post,head
+
+AJAX支持 get，post，put，delete
+
+TomCat无法直接解析put请求，解决，添加一个过滤器，解析出请求体中的参数
+
+REST在控制器中C和C之间跳转时会出现问题，上一个请求的请求参数会当做路径的一部分，因此会导致400,
+解决：使用绝对路径“/AddressController/showAddress”
+
+
+@RestController注解相当于@ResponseBody ＋ @Controller合在一起的作用。
+
+增删改之后跳转页面，使用重定向
+查询之后跳转页面，使用请求转发
+
+c -> c 请求功能的自动衔接，如
+增删改之后 -> 查询，跳转为重定向
+
+
+14-Oct-2019 14:54:25.218 信息 [http-nio-8080-exec-3] org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions Loading XML bean definitions from class path resource [org/springframework/jdbc/support/sql-error-codes.xml]
+14-Oct-2019 14:54:25.267 信息 [http-nio-8080-exec-3] org.springframework.jdbc.support.SQLErrorCodesFactory.<init> SQLErrorCodes loaded: [DB2, Derby, H2, HDB, HSQL, Informix, MS-SQL, MySQL, Oracle, PostgreSQL, Sybase]
+解决办法：
+      1、查找sql传参与该字段在数据库的数据类型是不是匹配。
+      2、在可视化界面（plsql,navicat）里面执行一下自己的sql是不是有语法错误，可视化界面里面报的错误要比项目日志里面报的明确得多。
+      3、数据库操作失败也会出现此问题，如要删除的记录存在外键
+
+
+使用Ajax发送Delete请求，会导致删除之后再查询，页面没有更新。
+
+
+spring 全家桶
+Spring framework 框架
+Spring data 框架
+Spring boot 框架
+Spring cloud 框架
+Spring MVC 框架
+
+Spring data中的模块
+spring-data-jpa：封装了Hibernate
+spring-data-JDBC:封装了对JDBC的操作
+spring-data-redis:封装了对redis的操作
+spring-data-MongoDB:封装了对MongoDB的操作
+spring-data-REST：为REST风格提供支持
